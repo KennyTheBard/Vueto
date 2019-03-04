@@ -2,32 +2,33 @@ import io
 from os import listdir
 from os.path import isfile, join
 
-STATES_FOLDER = "syllables_sets"
+STATES_FOLDER = "words_sets"
 
 
-def load():
-	syls = []
+def read_sets():
+	sets = []
 	my_path = STATES_FOLDER + "/"
 
 	files = listdir(my_path)
 	for f in files:
-		with open(my_path + f, 'r') as fin:
+		sets.append(f)
+
+	return sets
+
+
+def load(set):
+	words = []
+	my_path = STATES_FOLDER + "/"
+	msg = "Set loaded."
+
+	try:
+		with open(my_path + set, 'r') as fin:
 			for line in fin:
-				syls.append(line.strip('\n'))
-	syls.append("")
+				words.append(line.strip('\n'))
+	except IOError:
+		msg = "File could not be opened!"
 
-	state_machine = []
-	chances = []
-	for syl in syls:
-		state = []
-		total = 0
-		for syl in syls:
-			state.append(1)
-			total += 1
-		chances.append(total)
-		state_machine.append(state)
-
-	return (syls, chances, state_machine)
+	return (words, msg)
 
 
 if __name__ == "__main__":
