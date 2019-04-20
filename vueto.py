@@ -1,5 +1,5 @@
 
-from random import randint
+import random as rand
 import sys
 import loader
 
@@ -18,16 +18,10 @@ constants = {"STD_MAX": 5}
 cmd = ""
 
 def help():
-	print LIST + "\t\tlist all the available word sets"
-	print LOAD + " <word_set>\tload the requested load set"
+	print LOAD + " <word_set> <order>\tload the requested load set"
 	print GENERATE + " <max_len>\tcreate a random word out of the previous loaded\n\t\tword set. A word set has to be already loaded.\n\t\tA maximum word length must be selected."
 	print EXIT + "\t\tclose the program"
 
-
-def list():
-	print "Available sets are:"
-	for set in sets:
-		print "\t" + set
 
 def load(set):
 	global words
@@ -40,18 +34,13 @@ def generate(max_length):
 		print "ERROR: No set was loaded!"
 		return
 
-	wordcount = randint(2, max_length)
+	wordcount = rand.randint(2, max_length)
 	new_word = ""
 	for i in range(wordcount):
-		x = randint(0, len(words) - 1)
-		new_word += words[x]
+		new_word += rand.choice(words)
 
 	print new_word
 
-
-def define(var_name, var_val):
-	constants[var_name] = var_val
-	print "Valoarea variabilei " + var_name + " a fost updatat la " + var_val
 
 def interogate_user():
 	sys.stdout.write(">> ")
@@ -60,23 +49,29 @@ def interogate_user():
 
 
 while True:
-	cmd = interogate_user().lower().strip()
+	cmd = interogate_user().lower().strip().split(" ")
 	if EXIT in cmd:
 		break
 	elif HELP in cmd:
 		help()
+
 	elif LIST in cmd:
 		list()
+
 	elif LOAD in cmd:
-		load(cmd.split(" ")[1])
+		load(cmd[1])
+		if len(cmd) > 2:
+			load(cmd[1], int(cmd[2]))
+		else:
+			load(cmd[1], rand.randint(2, 12))
 	elif GENERATE in cmd:
-		if len(cmd.split(" ")) > 1:
-			generate(int(cmd.split(" ")[1]))
+		if len(cmd) > 1:
+			generate(int(cmd[1]))
 		else:
 			generate(constants["STD_MAX"])
 	elif DEFINE in cmd:
-		if len(cmd.split(" ")) > 2:
-			define(cmd.split(" ")[1], int(cmd.split(" ")[2]))
+		if len(cmd) > 2:
+			define(cmd[1], int(cmd[2]))
 		else:
 			print
 	else:
