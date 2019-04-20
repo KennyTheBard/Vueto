@@ -2,34 +2,39 @@ import io
 from os import listdir
 from os.path import isfile, join
 
-STATES_FOLDER = "words_sets"
+def parse_word(set, word):
+	curr = 0
+	while True:
+		prev = curr
+		curr += 1
+
+		if word[prev] not in set:
+			set[word[prev]] = []
+
+		if curr >= len(word):
+			set[word[prev]].append("")
+			break
+		else:
+			set[word[prev]].append(word[curr])
 
 
-def read_sets():
-	sets = []
-	my_path = STATES_FOLDER + "/"
 
-	files = listdir(my_path)
-	for f in files:
-		sets.append(f)
-
-	return sets
-
-
-def load(set):
-	words = []
-	my_path = STATES_FOLDER + "/"
+def load(my_path, order):
+	set = {}
 	msg = "Set loaded."
 
 	try:
-		with open(my_path + set, 'r') as fin:
+		with open(my_path, 'r') as fin:
 			for line in fin:
-				words.append(line.strip('\n'))
+				for word in line.strip('\n').split(" "):
+					if len(word) > 0:
+						parse_word(set, word)
+
 	except IOError:
 		msg = "File could not be opened!"
 
-	return (words, msg)
+	return (set, msg)
 
 
 if __name__ == "__main__":
-	print load()
+	print load("./sets/test.txt", 1)
