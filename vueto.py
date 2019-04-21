@@ -29,15 +29,16 @@ def generate():
 		print "ERROR: No set was loaded!"
 		return
 
-	new_word = ""
 	curr = rand.choice(set.keys())
+	new_word = curr
 	while True:
-		new_word += curr
-		curr = rand.choice(set[curr])
-		if curr == "":
+		aux = rand.choice(set[curr])
+		new_word += aux
+		curr = curr[1:] + aux
+		if aux == "":
 			break
 
-	print new_word
+	print new_word[0].upper() + new_word[1:]
 
 
 def interogate_user():

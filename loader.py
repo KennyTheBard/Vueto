@@ -2,20 +2,20 @@ import io
 from os import listdir
 from os.path import isfile, join
 
-def parse_word(set, word):
+def parse_word(set, word, order):
 	curr = 0
 	while True:
-		prev = curr
-		curr += 1
+		if word[curr:curr + order] not in set:
+			set[word[curr:curr + order]] = []
 
-		if word[prev] not in set:
-			set[word[prev]] = []
-
-		if curr >= len(word):
-			set[word[prev]].append("")
+		if curr >= len(word) - order:
+			set[word[curr:curr + order]].append("")
 			break
+
 		else:
-			set[word[prev]].append(word[curr])
+			set[word[curr:curr + order]].append(word[curr + order])
+
+		curr += 1
 
 
 
@@ -28,7 +28,7 @@ def load(my_path, order):
 			for line in fin:
 				for word in line.strip('\n').split(" "):
 					if len(word) > 0:
-						parse_word(set, word)
+						parse_word(set, word.lower(), order)
 
 	except IOError:
 		msg = "File could not be opened!"
