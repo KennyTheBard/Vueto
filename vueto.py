@@ -47,6 +47,12 @@ def interogate_user():
 	return sys.stdin.readline().strip('\n')
 
 
+if len(sys.argv[1:]) != 2:
+	print "Usage: python vueto.py path/to/word/set order_as_int"
+	sys.exit()
+	
+
+load(sys.argv[1], int(sys.argv[2]))
 while True:
 	cmd = interogate_user().lower().strip().split(" ")
 	if EXIT in cmd:
